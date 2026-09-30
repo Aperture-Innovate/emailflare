@@ -2,7 +2,6 @@
 # Clones mesahub-core and builds the Go binary from source.
 FROM golang:1.24-alpine AS build-core
 
-# Use Fastly CDN mirror for fast, reliable package downloads
 RUN sed -i 's|dl-cdn.alpinelinux.org|alpine.global.ssl.fastly.net|g' /etc/apk/repositories && \
     apk update && \
     apk add --no-cache gcc musl-dev sqlite-dev git
@@ -101,14 +100,14 @@ VOLUME ["/data"]
 
 RUN mkdir -p /usr/share/caddy
 
-# Backend runtime
-COPY --from=build-backend /app/services/emails/dist             ./services/emails/dist
-COPY --from=build-backend /app/services/emails/package.json     ./services/emails/package.json
-COPY --from=build-backend /app/packages/email-core/dist         ./packages/email-core/dist
-COPY --from=build-backend /app/packages/email-core/package.json ./packages/email-core/package.json
-COPY --from=build-backend /app/node_modules/.pnpm               ./node_modules/.pnpm
-COPY --from=build-backend /app/services/email-server/dist       ./services/email-server/dist
-COPY services/email-server/package.json                         ./services/email-server/
+# Workspace manifests
+COPY package.json pnpm-workspace.yaml ./
+
+# Backend runtime and all dependency symlinks
+COPY --from=build-backend /app/node_modules                     ./node_modules
+COPY --from=build-backend /app/packages/email-core              ./packages/email-core
+COPY --from=build-backend /app/services/emails                  ./services/emails
+COPY --from=build-backend /app/services/email-server            ./services/email-server
 
 # Email UI static files
 COPY --from=build-email-ui /app/services/email-ui/dist /usr/share/caddy
