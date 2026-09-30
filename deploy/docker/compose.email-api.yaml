@@ -5,6 +5,7 @@ services:
         build:
             context: ../..
             dockerfile: deploy/docker/Dockerfile.email-api
+            network: host
         ports:
             - "${PORT:-8090}:80"
         env_file:

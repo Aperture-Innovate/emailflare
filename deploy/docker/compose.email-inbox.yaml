@@ -27,6 +27,7 @@ services:
         build:
             context: ../..
             dockerfile: deploy/docker/Dockerfile.email-inbox
+            network: host
         restart: unless-stopped
         ports:
             - "${INBOX_PORT:-8091}:80"

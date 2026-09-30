@@ -4,6 +4,7 @@ services:
         build:
             context: ../../infra
             dockerfile: Dockerfile.mesahub
+            network: host
         env_file:
             - .env.api.local
         environment:

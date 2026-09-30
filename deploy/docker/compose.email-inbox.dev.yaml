@@ -17,6 +17,7 @@ services:
         build:
             context: ../../infra
             dockerfile: Dockerfile.mesahub
+            network: host
         environment:
             - PORT=3002
             - ADMIN_TOKEN=${MESAHUB_ADMIN_TOKEN:-inbox-dev-token}
