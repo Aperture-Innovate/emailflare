@@ -7,8 +7,8 @@ services:
             dockerfile: deploy/docker/Dockerfile.email-api
             network: host
         ports:
-            # Maps host ${PORT:-8090} -> container 8090 (where Caddy is listening)
-            - "${PORT:-8090}:8090"
+            # Maps host ${PORT:-8090} -> container ${PORT:-8090} (where Caddy is listening)
+            - "${PORT:-8090}:${PORT:-8090}"
         env_file:
             - .env.local
         environment:
@@ -17,7 +17,7 @@ services:
             - app-data:/data
         restart: unless-stopped
         healthcheck:
-            test: ["CMD", "curl", "-sf", "http://localhost:8090/health"]
+            test: ["CMD", "curl", "-sf", "http://localhost:${PORT:-8090}/health"]
             interval: 10s
             timeout: 5s
             retries: 5
