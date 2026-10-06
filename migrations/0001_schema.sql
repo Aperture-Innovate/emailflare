@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS domains (
   created_at         TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS templates (
+CREATE TABLE IF NOT EXISTS templates (x
   id          TEXT PRIMARY KEY,
   name        TEXT NOT NULL,
   slug        TEXT UNIQUE,
